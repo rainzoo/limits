@@ -1,0 +1,48 @@
+repos:
+  # General Hygiene & Security
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  # Secret Scanning
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+
+  # Spelling & Typos
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        args: ["--skip=*.lock,package.json,package-lock.json"]
+
+  # Python
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.21.2
+    hooks:
+      - id: pyupgrade
+        args: [--py311-plus]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.13
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Python: Security & Unused Deps
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.10.0
+    hooks:
+      - id: pip-audit
+        args: ["--local"]

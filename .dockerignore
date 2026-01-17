@@ -1,0 +1,9 @@
+.vscode
+.venv
+__pycache__
+.git
+.idea
+.vscode
+*.pyc
+.ruff_cache
+.pre-commit-config.yaml
