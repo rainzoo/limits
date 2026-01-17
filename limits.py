@@ -1,11 +1,3 @@
-# /// script
-# dependencies = [
-#    "humanize>=4.12.3",
-#    "psutil>=7.0.0",
-#    "textual>=3.5.0",
-# ]
-# ///
-
 import os
 import shutil
 import sys
