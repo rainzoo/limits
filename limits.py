@@ -286,7 +286,7 @@ class LimitsApp(App):
         for item in os_info:
             if item[1] in (
                 "CPU",
-                "Memory Information",  # <-- Add new section header
+                "Memory Information",
                 "Process Resource Limits",
                 "Filesystem Limits",
                 "Mounted Filesystems",
