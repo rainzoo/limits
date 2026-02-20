@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import tempfile
 
 import humanize
 import psutil
@@ -190,6 +191,36 @@ def get_os_info() -> list[tuple]:
             )
         )
 
+    # --- Section: Filesystem Permissions ---
+    info.append(("", "Filesystem Permissions", ""))
+
+    paths_to_check = {
+        "Home Directory": os.path.expanduser("~"),
+        "Current Directory": os.getcwd(),
+        "Temp Directory": tempfile.gettempdir(),
+        "Root Directory": "/" if sys.platform != "win32" else "C:\\",
+    }
+
+    if sys.platform != "win32":
+        paths_to_check["/etc (Config)"] = "/etc"
+        paths_to_check["/var/log (Logs)"] = "/var/log"
+
+    for name, path_val in paths_to_check.items():
+        if not os.path.exists(path_val):
+            info.append((name, "Not Found", path_val))
+            continue
+
+        perms = []
+        if os.access(path_val, os.R_OK):
+            perms.append("Read")
+        if os.access(path_val, os.W_OK):
+            perms.append("Write")
+        if os.access(path_val, os.X_OK):
+            perms.append("Execute")
+
+        access_str = ", ".join(perms) if perms else "No Access"
+        info.append((name, access_str, path_val))
+
     # --- Section: Disk and Inode Information ---
     info.append(("", "Mounted Filesystems", ""))  # Section header
     processed_devices = set()
@@ -289,10 +320,11 @@ class LimitsApp(App):
                 "Memory Information",
                 "Process Resource Limits",
                 "Filesystem Limits",
+                "Filesystem Permissions",
                 "Mounted Filesystems",
             ):
                 table.add_row()
-            table.add_row(*item, label=item[0])
+            table.add_row(*item)
 
 
 if __name__ == "__main__":
